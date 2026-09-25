@@ -1,459 +1,382 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>portfolio</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<!--
+  ============================================================
+  THOMAS SORENSEN — personal site
+  Brand: "Storm" — built on the Rivian R1T (Storm Blue).
+  Signature devices:
+    1. The light bar  -> .lightbar (the LED bar across the truck's front/rear)
+    2. The stadium oval -> .stadium / .monogram / timeline nodes (headlight shape)
+    3. Dashboard mono   -> .mono (all numerals, like the speedometer)
+  No frameworks, no build step, no JS. One web font (Lato). Edit tokens in :root.
+  ============================================================
+-->
 
-    <title>Thomas Sorensen - Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+<style>
+/* ============================================================
+   1. DESIGN TOKENS  (all colors sampled from the truck photos)
+   ============================================================ */
+:root{
+  color-scheme: light;
 
-    <!-- Custom CSS -->
-    <link href="css/agency.css" rel="stylesheet">
+  /* --- Storm Blue family (the body paint) --- */
+  --storm-900:#14212A;   /* deepest — hero & footer backgrounds        */
+  --storm-800:#1B2C36;   /* dark section background                    */
+  --storm-700:#283B47;   /* true body blue, sampled — primary          */
+  --storm-600:#324957;   /* sunlit panel, sampled                      */
+  --slate-500:#3F6076;   /* mid accent — links / accents on light      */
+  --slate-400:#6E8A9A;   /* muted blue-grey — secondary text on dark   */
 
-    <!-- Custom Fonts -->
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+  /* --- Silver body + light base --- */
+  --silver-050:#F4F4F1;  /* page background (warm near-white)           */
+  --silver-100:#ECECE8;
+  --silver-200:#DADAD8;  /* body silver, sampled — panels              */
+  --silver-300:#C6C7C3;  /* hairline borders on light                  */
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  /* --- Graphite cladding (dark neutral / text) --- */
+  --graphite-900:#1F2327; /* primary text on light, sampled ~#2A2A2A   */
+  --graphite-600:#4C5155; /* secondary text on light                   */
 
+  /* --- Compass Yellow (the single marker — use once) --- */
+  --compass:#ECC24E;      /* sampled from the fender marker            */
+
+  --white:#FFFFFF;        /* LED glow                                   */
+
+  /* --- Type --- */
+  --sans: "Lato", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* --- Rhythm --- */
+  --pad: clamp(1.25rem, 5vw, 6rem);   /* page side padding */
+  --maxw: 1120px;
+}
+
+/* ============================================================
+   2. RESET / BASE
+   ============================================================ */
+*{ box-sizing:border-box; margin:0; }
+html{ background:var(--silver-050); scroll-behavior:smooth; }
+body{
+  font-family:var(--sans);
+  font-weight:400;
+  color:var(--graphite-900);
+  background:var(--silver-050);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{ color:var(--slate-500); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+img{ max-width:100%; display:block; }
+
+.wrap{ max-width:var(--maxw); margin-inline:auto; padding-inline:var(--pad); }
+
+/* Dashboard-style mono readout (years, labels, coordinates) */
+.mono{
+  font-family:var(--mono);
+  font-size:.78rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+/* ============================================================
+   3. SIGNATURE DEVICE — the light bar
+   (The LED bar across the front and rear of the truck.
+    A single glowing line, brightest in the middle, fading at both ends.)
+   ============================================================ */
+.lightbar{
+  height:3px;
+  border-radius:999px;
+  background:linear-gradient(90deg, transparent, var(--white) 20%, var(--white) 80%, transparent);
+  box-shadow:0 0 18px rgba(255,255,255,.5);
+}
+
+/* A slimmer, quieter version used as a section divider */
+.divider{
+  height:2px;
+  box-shadow:none;
+  background:linear-gradient(90deg, transparent, var(--slate-500), transparent);
+}
+.divider.on-dark{ background:linear-gradient(90deg, transparent, var(--slate-400), transparent); }
+
+/* ============================================================
+   4. HERO  (dark — the front of the truck powering on)
+   ============================================================ */
+.hero{
+  background:radial-gradient(120% 90% at 50% -10%, var(--storm-700), var(--storm-900) 70%);
+  color:var(--silver-050);
+  padding-block:clamp(4rem, 12vh, 9rem);
+}
+.hero .wrap{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:2.2rem; }
+.hero .lightbar{ width:min(520px, 84vw); }
+
+/* Monogram inside a stadium oval — echoes the R1T headlight shape */
+.monogram{
+  width:88px; height:132px; border-radius:999px;
+  border:2px solid var(--slate-400);
+  display:grid; place-items:center;
+  font-weight:900; font-size:1.9rem; letter-spacing:.06em;
+  color:var(--silver-050);
+  background:radial-gradient(130% 55% at 50% 15%, rgba(255,255,255,.12), transparent 60%), var(--storm-800);
+}
+
+.wordmark{
+  font-weight:900;
+  font-size:clamp(2.4rem, 8vw, 5.5rem);
+  line-height:.98;
+  letter-spacing:.14em;             /* wide tracking — the RIVIAN wordmark feel */
+  text-transform:uppercase;
+  margin-inline:-.14em;             /* optically re-center the tracked caps */
+}
+.tagline{
+  max-width:36ch;
+  font-weight:300;
+  font-size:clamp(1.05rem, 2.4vw, 1.4rem);
+  color:var(--silver-200);
+}
+.readout{ color:var(--slate-400); }
+.readout b{ color:var(--compass); font-weight:700; }   /* the one yellow marker */
+
+/* Stadium (pill) button — the headlight geometry as a control */
+.stadium{
+  display:inline-flex; align-items:center; gap:.6rem;
+  padding:.85rem 1.6rem;
+  border-radius:999px;
+  font-weight:700; font-size:.95rem; letter-spacing:.02em;
+  border:2px solid var(--silver-050);
+  color:var(--silver-050);
+  background:transparent;
+  transition:background .18s ease, color .18s ease;
+}
+.stadium:hover{ background:var(--silver-050); color:var(--storm-900); text-decoration:none; }
+.stadium.solid{ background:var(--silver-050); color:var(--storm-900); border-color:var(--silver-050); }
+.stadium.solid:hover{ background:transparent; color:var(--silver-050); }
+.cta-row{ display:flex; gap:.9rem; flex-wrap:wrap; justify-content:center; }
+
+/* ============================================================
+   5. SECTION SCAFFOLD
+   ============================================================ */
+section{ padding-block:clamp(3.5rem, 9vh, 7rem); }
+.light{ background:var(--silver-050); color:var(--graphite-900); }
+.dark { background:var(--storm-800); color:var(--silver-050); }
+
+.sec-head{ display:flex; flex-direction:column; gap:1rem; margin-bottom:3rem; }
+.sec-index{ color:var(--slate-500); }
+.dark .sec-index{ color:var(--slate-400); }
+.sec-title{ font-weight:900; font-size:clamp(1.7rem, 4.5vw, 2.6rem); letter-spacing:.01em; }
+.sec-head .divider{ width:100%; }      /* the light bar over each section */
+
+/* ============================================================
+   6. WORK HISTORY  — timeline on the light-bar spine
+   ============================================================ */
+.note{
+  font-size:.85rem; color:var(--graphite-600);
+  border-left:3px solid var(--compass);
+  padding:.5rem 0 .5rem .9rem; margin-bottom:2.4rem; max-width:60ch;
+}
+.timeline{ position:relative; padding-left:2.4rem; }
+.timeline::before{            /* the vertical light bar (spine) */
+  content:""; position:absolute; left:7px; top:6px; bottom:6px; width:2px;
+  background:linear-gradient(180deg, var(--slate-500), var(--silver-300));
+}
+.role{ position:relative; padding-block:1.3rem; }
+.role::before{                /* stadium node */
+  content:""; position:absolute; left:-2.4rem; top:1.7rem;
+  width:16px; height:26px; border-radius:999px;
+  border:2px solid var(--slate-500); background:var(--silver-050);
+}
+.role + .role{ border-top:1px solid var(--silver-300); }
+.role .yr{ color:var(--slate-500); display:block; margin-bottom:.35rem; }
+.role h3{ font-size:1.2rem; font-weight:700; }
+.role .co{ color:var(--graphite-600); font-weight:400; }
+.role p{ margin-top:.4rem; color:var(--graphite-600); max-width:62ch; }
+
+/* ============================================================
+   7. "WORKING WITH ME" — spec sheet (like a vehicle spec table)
+   ============================================================ */
+.specs{ display:grid; gap:0; border-top:1px solid rgba(255,255,255,.14); }
+.spec{
+  display:grid; grid-template-columns:minmax(120px,180px) 1fr; gap:1.5rem;
+  padding:1.5rem 0; border-bottom:1px solid rgba(255,255,255,.14);
+}
+.spec .k{ color:var(--slate-400); align-self:start; padding-top:.15rem; }
+.spec .v{ font-size:1.1rem; font-weight:300; color:var(--silver-100); }
+.spec .v b{ font-weight:700; color:var(--white); }
+
+/* ============================================================
+   8. CONTACT / FOOTER  (rear of the truck — full-width light bar)
+   ============================================================ */
+.foot{ background:var(--storm-900); color:var(--silver-100); padding-block:clamp(3rem,8vh,6rem); }
+.foot .bar-full{
+  height:3px; border-radius:3px; margin-bottom:2.6rem;
+  background:linear-gradient(90deg, transparent, var(--white) 15%, var(--white) 85%, transparent);
+  box-shadow:0 0 14px rgba(255,255,255,.4);
+}
+.foot h2{ font-weight:900; font-size:clamp(1.6rem,4.5vw,2.4rem); letter-spacing:.02em; }
+.foot .email{ display:inline-block; margin-top:1rem; font-size:clamp(1.05rem,2.8vw,1.5rem); color:var(--silver-050); font-weight:700; }
+.foot .meta{ margin-top:2.4rem; color:var(--slate-400); display:flex; gap:.6rem; flex-wrap:wrap; align-items:center; }
+.foot .meta .dot{ opacity:.5; }
+
+/* ============================================================
+   9. THE ONE MOTION MOMENT — power-on sequence on load
+   ============================================================ */
+@keyframes barOn{ from{ transform:scaleX(0); opacity:0; } to{ transform:scaleX(1); opacity:1; } }
+@keyframes riseIn{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+
+.hero .lightbar{ transform-origin:center; animation:barOn .8s cubic-bezier(.22,1,.36,1) .15s both; }
+.hero .monogram{ animation:riseIn .6s ease .8s both; }
+.hero .wordmark{ animation:riseIn .6s ease .95s both; }
+.hero .tagline{  animation:riseIn .6s ease 1.1s both; }
+.hero .readout{  animation:riseIn .6s ease 1.2s both; }
+.hero .cta-row{  animation:riseIn .6s ease 1.3s both; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; }
+  .hero .lightbar{ transform:none; opacity:1; }
+}
+
+/* Keyboard focus — visible, on-brand */
+a:focus-visible, .stadium:focus-visible{
+  outline:2px solid var(--compass); outline-offset:3px; border-radius:999px;
+}
+
+/* ============================================================
+   10. MOBILE
+   ============================================================ */
+@media (max-width:560px){
+  .spec{ grid-template-columns:1fr; gap:.4rem; }
+  .spec .k{ padding-top:0; }
+  .timeline{ padding-left:1.9rem; }
+  .role::before{ left:-1.9rem; }
+}
+.note code{ font-family:var(--mono); font-size:.82em; background:var(--silver-100); padding:.05em .35em; border-radius:4px; }
+</style>
 </head>
 
-<body id="page-top" class="index">
+<body>
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                </button>
-                <!-- <a class="navbar-brand page-scroll" href="#page-top">Start Bootstrap</a> -->
-            </div>
+<!-- ============================ HERO ============================ -->
+<header class="hero">
+  <div class="wrap">
+    <div class="monogram" aria-hidden="true">TS</div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-left">
-                    <li class="hidden">
-                        <a href="#page-top"></a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#about">About</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#skills">Skills</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#portfolio">Portfolio</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#contactMe">Contact</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="./img/ThomasSorensenResume.pdf">Resume</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container-fluid -->
-    </nav>
+    <h1 class="wordmark">Thomas<br>Sorensen</h1>
 
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <div class="intro-text">
-                <div class="intro-heading">Thomas Sorensen</div>
-                <div class="intro-lead-in">Full Stack Software Engineer</div>
-                <a href="#portfolio" class="page-scroll btn btn-xl">View my Portfolio</a>
-            </div>
-        </div>
-    </header>
-<!-- About Section -->
-    <section id="about" class="bg-light-gray">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2 class="section-heading">Thomas Sorensen</h2>
-                    <h3 class="section-subheading text-muted">About Me</h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6"> 
-                    <img class="img-responsive" src="img/about/headshot.png" alt="headshot">
-                </div>
-                <div class="col-lg-6"> 
-                    <h2 class="text">I'm a cool guy doing cool stuff.  Why don't you give me a job howabout?</h2>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Services Section -->
-    <section id="skills">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2 class="section-heading">Skills</h2>
-                </div>
-            </div>
-            <div class="row text-center">
-                <div class="col-lg-1 col-md-2 col-sm-4 col-xs-6">
-                    <span class="fa-stack fa-4x">
-                        <img src="./img/html5.png" class="fa img-responsive"
-                    </span>
+    <div class="lightbar" aria-hidden="true"></div>
 
-                    <p class="text-muted">HTML5</p>
-                </div>
-                <div class="col-lg-1 col-md-2 col-sm-4 col-xs-6">
-                    <span class="fa-stack fa-4x">
-                        <img src="./img/css3.png" class="fa img-responsive"
-                    </span>
-                    <p class="text-muted">CSS3</p>
-                </div>
-                <div class="col-lg-1 col-md-2 col-sm-4 col-xs-6">
-                    <span class="fa-stack fa-4x">
-                        <img src="./img/javascript.png" class="fa img-responsive"
-                    </span>
-                    <p class="text-muted">Javascript</p>
-                </div>
-                <div class="col-lg-1 col-md-2 col-sm-4 col-xs-6">
-                    <span class="fa-stack fa-4x">
-                        <img src="./img/angular.png" class="fa img-responsive"
-                    </span>
-                    <p class="text-muted">AngularJS</p>
-                </div>
-                <div class="col-lg-1 col-md-2 col-sm-4 col-xs-6">
-                    <span class="fa-stack fa-4x">
-                        <img src="./img/mongodb.png" class="fa img-responsive"
-                    </span>
-                    <p class="text-muted">MongoDB</p>
-                </div>
-                <div class="col-lg-1 col-md-2 col-sm-4 col-xs-6">
-                    <span class="fa-stack fa-4x">
-                        <img src="./img/postgresql.png" class="fa img-responsive"
-                    </span>
-                    <p class="text-muted">PostgreSQL</p>
-                </div>
-                <div class="col-lg-1 col-md-2 col-sm-4 col-xs-6">
-                    <span class="fa-stack fa-4x">
-                        <img src="./img/d3.png" class="fa img-responsive"
-                    </span>
-                    <p class="text-muted">D3</p>
-                </div>
-                <div class="col-lg-1 col-md-2 col-sm-4 col-xs-6">
-                    <span class="fa-stack fa-4x">
-                        <img src="./img/bootstrap.png" class="fa img-responsive"
-                    </span>
-                    <p class="text-muted">Bootstrap</p>
-                </div>
-                <div class="col-lg-1 col-md-2 col-sm-4 col-xs-6">
-                    <span class="fa-stack fa-4x">
-                        <img src="./img/heroku.png" class="fa img-responsive"
-                    </span>
-                    <p class="text-muted">Heroku</p>
-                </div>
-                <div class="col-lg-1 col-md-2 col-sm-4 col-xs-6">
-                    <span class="fa-stack fa-4x">
-                        <img src="./img/npm.png" class="fa img-responsive"
-                    </span>
-                    <p class="text-muted">npm</p>
-                </div>
-                <div class="col-lg-1 col-md-2 col-sm-4 col-xs-6">
-                    <span class="fa-stack fa-4x">
-                        <img src="./img/nodejs.png" class="fa img-responsive"
-                    </span>
-                    <p class="text-muted">NodeJS</p>
-                </div>
-                <div class="col-lg-1 col-md-2 col-sm-4 col-xs-6">
-                    <span class="fa-stack fa-4x">
-                        <img src="./img/express.png" class="fa img-responsive"
-                    </span>
-                    <p class="text-muted">ExpressJS</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <p class="tagline">Customer Success Engineer. I turn complex platforms into outcomes customers can measure.</p>
 
-    <!-- Portfolio Grid Section -->
-    <section id="portfolio" class="bg-light-gray">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2 class="section-heading">Recent Projects</h2>
-                    <h3 class="section-subheading text-muted">Click to see more</h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-sm-12 portfolio-item">
-                    <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
-                                <i class="fa fa-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/evenhireMini.jpg" class="img-responsive" alt="EvenHire splash">
-                    </a>
-                    <div class="portfolio-caption">
-                        <h4>EvenHire</h4>
-                        <p class="text-muted">Unbiased Applicant Tracking System</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12 portfolio-item">
-                    <a href="#portfolioModal2" class="portfolio-link" data-toggle="modal">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
-                                <i class="fa fa-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/freebeezMini.png" class="img-responsive" alt="Freebeez splash">
-                    </a>
-                    <div class="portfolio-caption">
-                        <h4>Freebeez</h4>
-                        <p class="text-muted">Platform to find and post free items</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12 portfolio-item">
-                    <a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
-                                <i class="fa fa-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/funfinderMini.png" class="img-responsive" alt="">
-                    </a>
-                    <div class="portfolio-caption">
-                        <h4>Funfinder</h4>
-    
-                        <p class="text-muted">Fun Event Finder</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12 portfolio-item">
-                    <a href="#portfolioModal4" class="portfolio-link" data-toggle="modal">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
-                                <i class="fa fa-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/lancealotMini.png" class="img-responsive" alt="">
-                    </a>
-                    <div class="portfolio-caption">
-                        <h4>Lance-A-Lot</h4>
-                        <p class="text-muted">Freelancer's tool to track clients</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <p class="mono readout">Mountain View, CA <span class="dot">·</span> Customer Success <span class="dot">·</span> <b>Available</b></p>
 
+    <div class="cta-row">
+      <a class="stadium solid" href="#work">View work</a>
+      <a class="stadium" href="#contact">Get in touch</a>
+    </div>
+  </div>
+</header>
 
-    <!-- ContactMe Section -->
-    <section id="contactMe" class="bg-light-gray">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2 class="section-heading">Get in touch</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-3">
-                    <div class="team-member">
-                            <img src="img/LocationIcon.png" class="img-responsive img-square" alt="Location Icon">
-                            <p class="text-muted">Location</p>
-                            <h4>San Francisco</h4>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="team-member">
-                        <img src="img/EmailIcon.png" class="img-responsive img-circle" alt="Email Icon">
-                        <p class="text-muted">Email</p>
-                        <h4>Thomas P Sorensen @ gmail</h4>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="team-member">
-                        <a href="./img/ThomasSorensenResume.pdf"><img src="img/ResumeIcon.png" class="img-responsive img-square" alt="Resume Icon">
-                            <p class="text-muted">Resume</p>
-                            <h4>Click to Download</h4>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="team-member">
-                        <a href="https://www.linkedin.com/in/sorensenthomas"><img src="img/LinkedInLogo.png" class="img-responsive img-square" alt="Resume Icon">
-                            <p class="text-muted">LinkedIn</p>
-                            <h4>See my profile</h4>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <span class="copyright">Copyright &copy; Thomas Sorensen 2016</span>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Portfolio Modals -->
-    <!-- Use the modals below to showcase details about your portfolio projects! -->
-
-    <!-- Portfolio Modal 1 -->
-    <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl">
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <div class="modal-body">
-                            <!-- Project Details Go Here -->
-                            <h2>Even Hire</h2>
-                            <p class="item-intro text-muted">An unbiased applicant tracking system</p>
-                            <img class="img-responsive img-centered" src="img/portfolio/evenhireMini.jpg" alt="EvenHire image">
-                            <p><a href="https://evenhire.herokuapp.com">EvenHire</a> is a responsive web application that removes the unconscious bias from the hiring process by hiding data that might reveal gender or ethnicity, allowing recruiters to diversify their workforce.</p>
-                            <p>You can preview EvenHire <a href="http://evenhire.herokuapp.com">here</a>.</p>
-                            <ul class="list-inline">
-                                <li>Date: 2016</li>
-                            </ul>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- ============================ WORK ============================ -->
+<section id="work" class="light">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="divider" aria-hidden="true"></div>
+      <span class="mono sec-index">01 / Experience</span>
+      <h2 class="sec-title">Work history</h2>
     </div>
 
-    <!-- Portfolio Modal 2 -->
-    <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl">
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <div class="modal-body">
-                            <h2>FreeBeez</h2>
-                            <p class="item-intro text-muted">Find/Give free items</p>
-                            <img class="img-responsive img-centered" src="img/portfolio/freebeezMini.png" alt="Freebeez image">
-                            <p><a href="http://freebeez.herokuapp.com">FreeBeez</a> is a web application that allows a user to post items that she/he wants to give away. Other users can see the posted items and their locations.</p>
-                            <p>You can preview FreeBeez <a href="http://freebeez.herokuapp.com">here</a>.</p>
-                            <ul class="list-inline">
-                                <li>Date: 2016</li>
-                            </ul>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="timeline">
+      <article class="role">
+        <span class="mono yr">2025 – 2026</span>
+        <h3>Customer Support Engineer, L2 <span class="co">· AppZen</span></h3>
+        <p>The sole team member authorized to support compliance-restricted government and military clients, carrying a major enterprise deployment through go-live. Built a Postman API Runner workflow to safely automate high-risk configuration updates across hundreds of records, cutting per-client execution from up to 8 hours down to minutes.</p>
+      </article>
+
+      <article class="role">
+        <span class="mono yr">2019 – 2024</span>
+        <h3>Customer Success Engineer III <span class="co">· Oura</span></h3>
+        <p>Five years at Oura, rising from Senior Technical Support Specialist through Customer Success Engineer I–III and Team Lead. Delivered white-glove support to VIP, enterprise, and military clients, and reduced API ticket volume 30% by tracing root causes and partnering with Design and Engineering on user-friendly UI fixes.</p>
+      </article>
+
+      <article class="role">
+        <span class="mono yr">2014 – 2015</span>
+        <h3>IT Support Specialist <span class="co">· FinancialForce.com</span></h3>
+        <p>Ran software training bootcamps and resolved technical issues for a 300+ member international team; decreased IT support requests 20% by migrating internal email and calendars from Microsoft to Google.</p>
+      </article>
+
+      <article class="role">
+        <span class="mono yr">2009 – 2013</span>
+        <h3>Family Room Specialist / Genius Bar <span class="co">· Apple</span></h3>
+        <p>Genius Bar repairs and One to One training across Apple hardware and software. Built an internal iBooks tool for finding the correct video adapters that reduced product returns 20%.</p>
+      </article>
+
+      <article class="role">
+        <span class="mono yr">2004 – 2007</span>
+        <h3>Assistant Language Teacher <span class="co">· JET Programme, Japan</span></h3>
+        <p>The start of the arc: teaching, communication, and working across cultures. Taught myself HTML and CSS to build a website hosting video lessons — the interpersonal and self-taught-technical foundation under everything since.</p>
+      </article>
+
+      <article class="role">
+        <span class="mono yr">2024</span>
+        <h3>Stanford Continuing Studies <span class="co">· BUS 100: Essential Business Skills</span></h3>
+      </article>
+
+      <article class="role">
+        <span class="mono yr">2016</span>
+        <h3>Hack Reactor <span class="co">· Advanced Software Engineering Immersive</span></h3>
+        <p>Full-stack software engineering: JavaScript and the fundamentals behind the debugging, API, and tooling work.</p>
+      </article>
+
+      <article class="role">
+        <span class="mono yr">1998 – 2002</span>
+        <h3>University of Wisconsin-Madison <span class="co">· B.A., Theatre &amp; Drama</span></h3>
+        <p>Bachelor of Arts in Theatre and Drama, plus a Certificate in Integrated Liberal Studies.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== WORKING WITH ME (placeholder) ==================== -->
+<!-- Thomas: you were undecided on this section. It's a "spec sheet" draft.
+     Fill in the values, or delete this whole <section> block to remove it. -->
+<section id="working" class="dark">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="divider on-dark" aria-hidden="true"></div>
+      <span class="mono sec-index">02 / Operating specs</span>
+      <h2 class="sec-title">What it's like to work with me</h2>
     </div>
 
-    <!-- Portfolio Modal 3 -->
-    <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl">
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <div class="modal-body">
-                            <!-- Project Details Go Here -->
-                            <h2>FunFinder</h2>
-                            <p class="item-intro text-muted">Find something fun to do</p>
-                            <img class="img-responsive img-centered" src="img/portfolio/funfinderMini.png" alt="FunFinder image">
-                            <p><a href="https://find-fun.herokuapp.com">FunFinder</a> shows you multiple fun events near you.</p>
-                            <p>You can preview FunFinder <a href="http://find-fun.herokuapp.com">here</a>.</p>
-                            <ul class="list-inline">
-                                <li>Date: 2016</li>
-                            </ul>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <p class="note" style="color:var(--slate-400);border-color:var(--compass)">Placeholder — draft your own principles or delete this section.</p>
+
+    <div class="specs">
+      <div class="spec"><span class="mono k">Default mode</span><span class="v"><b>Act, don't ask.</b> If it's reversible and cheap, I do it and tell you.</span></div>
+      <div class="spec"><span class="mono k">Communication</span><span class="v">Direct and specific. I lead with the recommendation, then the reasoning.</span></div>
+      <div class="spec"><span class="mono k">Ownership</span><span class="v"><b>Done means done.</b> Five things asked is five things delivered, with any blocker named in one sentence.</span></div>
+      <div class="spec"><span class="mono k">Under pressure</span><span class="v">Calm, methodical, honest about what I know versus what I'm still checking.</span></div>
     </div>
+  </div>
+</section>
 
-    <!-- Portfolio Modal 4 -->
-    <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl">
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <div class="modal-body">
-                            <!-- Project Details Go Here -->
-                            <h2>Lance-a-lot</h2>
-                            <p class="item-intro text-muted">Track your freelance jobs.</p>
-                            <img class="img-responsive img-centered" src="img/portfolio/lancealotMini.png" alt="Lance-a-lot image">
-                            <p><a href="https://lance-a-lot.herokuapp.com">Lance-a-lot</a> is a job management tool for freelancers</p>
-                            <p>You can preview Lance-a-lot<a href="http://lance-a-lot.herokuapp.com">here</a>.</p>
-                            <ul class="list-inline">
-                                <li>Date: 2016</li>
-                            </ul>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-
-    <!-- Plugin JavaScript -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-    <script src="js/classie.js"></script>
-    <script src="js/cbpAnimatedHeader.js"></script>
-
-    <!-- Contact Form JavaScript -->
-    <script src="js/jqBootstrapValidation.js"></script>
-    <script src="js/contact_me.js"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="js/agency.js"></script>
+<!-- ============================ CONTACT ============================ -->
+<footer id="contact" class="foot">
+  <div class="wrap">
+    <div class="bar-full" aria-hidden="true"></div>
+    <h2>Let's talk.</h2>
+    <a class="email" href="mailto:thomassorensensuccessengineer@gmail.com">thomassorensensuccessengineer@gmail.com</a>
+    <p class="mono meta">Thomas Sorensen <span class="dot">·</span> Customer Success Engineer <span class="dot">·</span> Mountain View, CA</p>
+  </div>
+</footer>
 
 </body>
-
 </html>
+
+</body></html>
