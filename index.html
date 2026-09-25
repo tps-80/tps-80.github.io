@@ -119,14 +119,26 @@ img{ max-width:100%; display:block; }
 .hero .wrap{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:2.2rem; }
 .hero .lightbar{ width:min(520px, 84vw); }
 
-/* Monogram inside a stadium oval — echoes the R1T headlight shape */
-.monogram{
-  width:88px; height:132px; border-radius:999px;
-  border:2px solid var(--slate-400);
-  display:grid; place-items:center;
-  font-weight:900; font-size:1.9rem; letter-spacing:.06em;
-  color:var(--silver-050);
-  background:radial-gradient(130% 55% at 50% 15%, rgba(255,255,255,.12), transparent 60%), var(--storm-800);
+/* Logo in pure CSS: one element, 11 solid rectangles drawn as background layers.
+   Scales to any width; recolor with `color`. The shape fills the element edge to edge
+   (the 144px margin from the image files is removed, so add padding/margin as needed). */
+.logo {
+  display: inline-block;
+  width: 144px;            /* set any size; height follows */
+  aspect-ratio: 1;
+  color: var(--silver-050);             /* logo color */
+  background:
+    linear-gradient(currentColor 0 0) 0% 0% / 22.2222% 11.1111% no-repeat,
+    linear-gradient(currentColor 0 0) 0% 0% / 11.1111% 44.4444% no-repeat,
+    linear-gradient(currentColor 0 0) 50% 0% / 33.3333% 11.1111% no-repeat,
+    linear-gradient(currentColor 0 0) 37.5% 0% / 11.1111% 55.5556% no-repeat,
+    linear-gradient(currentColor 0 0) 62.5% 0% / 11.1111% 33.3333% no-repeat,
+    linear-gradient(currentColor 0 0) 50% 50% / 33.3333% 11.1111% no-repeat,
+    linear-gradient(currentColor 0 0) 62.5% 100% / 11.1111% 55.5556% no-repeat,
+    linear-gradient(currentColor 0 0) 50% 100% / 33.3333% 11.1111% no-repeat,
+    linear-gradient(currentColor 0 0) 37.5% 100% / 11.1111% 33.3333% no-repeat,
+    linear-gradient(currentColor 0 0) 100% 0% / 11.1111% 44.4444% no-repeat,
+    linear-gradient(currentColor 0 0) 100% 37.5% / 22.2222% 11.1111% no-repeat;
 }
 
 .wordmark{
@@ -267,7 +279,7 @@ a:focus-visible, .stadium:focus-visible{
 <!-- ============================ HERO ============================ -->
 <header class="hero">
   <div class="wrap">
-    <div class="monogram" aria-hidden="true">TS</div>
+    <div class="logo" aria-hidden="true"></div>
 
     <h1 class="wordmark">Thomas<br>Sorensen</h1>
 
